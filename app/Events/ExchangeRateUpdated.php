@@ -36,7 +36,7 @@ class ExchangeRateUpdated implements ShouldBroadcast
             [
                 'currency_code_from' => $this->exchangeRate->currency_code_from,
                 'currency_code_to' => $this->exchangeRate->currency_code_to,
-                'value' => $this->exchangeRate->value
+                'value' => number_format($this->exchangeRate->value, 4)
             ]
         ];
     }

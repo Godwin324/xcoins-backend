@@ -2,8 +2,10 @@
 
 namespace App\Observers;
 
+use Carbon\Carbon;
 use App\Models\ExchangeRate;
 use App\Events\ExchangeRateUpdated;
+use Illuminate\Support\Facades\Cache;
 
 class ExchangeRateObserver
 {
@@ -17,6 +19,11 @@ class ExchangeRateObserver
     {
         broadcast(new ExchangeRateUpdated($exchangeRate));
 
+        $currencyFrom = strtolower($exchangeRate->currency_code_from);
+        $currencyTo = strtolower($exchangeRate->currency_code_to);
+        $cacheKey = "exchange-rate-{$currencyFrom}-to-{$currencyTo}";
+
+         Cache::put($cacheKey,$exchangeRate, Carbon::now()->addMinutes(5));
     }
 
     /**

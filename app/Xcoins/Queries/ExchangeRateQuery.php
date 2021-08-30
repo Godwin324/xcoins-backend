@@ -2,6 +2,7 @@
 
 namespace App\Xcoins\Queries;
 
+use Carbon\Carbon;
 use App\Models\ExchangeRate;
 use Illuminate\Support\Facades\Cache;
 
@@ -12,8 +13,9 @@ class ExchangeRateQuery
     {
         $exchangeRate = Cache::get('exchange-rate-btc-to-usd');
         if (empty($exchangeRate)) {
-            $exchangeRate = Cache::rememberForever(
+            $exchangeRate = Cache::remember(
                 'exchange-rate-btc-to-usd',
+                Carbon::now()->addMinutes(5),
                 function () {
                     return  ExchangeRate::where(
                         [
